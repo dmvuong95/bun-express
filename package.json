@@ -1,0 +1,24 @@
+{
+  "name": "bun-express",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Bun Express",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": {
+    "name": "Dang Minh Vuong",
+    "email": "dmvuong95@gmail.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "bun --watch tests/app.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "*"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "lib"
+  ]
+}
