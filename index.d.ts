@@ -1,5 +1,5 @@
 import Application from './lib/application'
-import { Router } from './lib/router'
+import { Router, RequestHandler, ErrorRequestHandler } from './lib/router'
 
 declare function express<WSData = unknown>(): Application<WSData>
 declare namespace express {
@@ -7,4 +7,4 @@ declare namespace express {
 }
 
 export default express
-export { Router }
+export { Router, RequestHandler, ErrorRequestHandler }
