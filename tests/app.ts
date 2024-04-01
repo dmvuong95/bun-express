@@ -48,11 +48,23 @@ app.router.post(
 )
 
 const router = express.Router()
-router.post('/bars/:bar', (req, res, next) => {
-  console.log('Bar:', req.path, req.params, req.query)
-  res.body = 'Bar' + req.params.bar
+router.post('/bars', (req, res, next) => {
+  console.log('Bars:', req.path, req.params, req.query)
+  res.body = 'Bars'
   res.close()
 })
+router.post(
+  '/bars/:bar',
+  (req, res, next) => {
+    console.log('Original Path:', req.originalPath)
+    console.log('Bar:', req.path, req.params, req.query)
+    next()
+  },
+  (req, res, next) => {
+    res.body = 'Bar: ' + req.params.bar
+    res.close()
+  }
+)
 app.router.use('/foo', router)
 
 app.router.use(((err, req, res, next) => {

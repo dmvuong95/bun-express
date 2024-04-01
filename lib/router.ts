@@ -1,18 +1,42 @@
 import type { SocketAddress } from 'bun'
 import type { ParsedUrlQuery } from 'node:querystring'
 import type Application from './application'
-import { Response } from './response'
+import type { Response } from './response'
 import { httpMethods, isErrorRequestHandler, parseParams } from './utils'
 
 declare global {
   interface Request {
+    /**
+     * Application instance.
+     */
     readonly app: Application
+    /**
+     * IP address of the client.
+     */
     readonly ip: SocketAddress
+    /**
+     * Original path from the request.
+     */
     readonly originalPath: string
+    /**
+     * Path after matched by the router.
+     */
     readonly path: string
+    /**
+     * Parameters from the path.
+     */
     readonly params: Record<string, string>
+    /**
+     * Query parameters parsed by `node:querystring`.
+     */
     readonly query: ParsedUrlQuery
+    /**
+     * The response object for the request.
+     */
     readonly res: Response
+    /**
+     * Error object if any error occurred in the request handlers.
+     */
     readonly error?: any
   }
 }
@@ -143,21 +167,25 @@ export function Router() {
   return router
 }
 
+const kRoutePath = Symbol.for('routePath')
+
 async function handleRequest(router: Router, req: Request, res: Response, next: NextFunction) {
   const { stack } = router
   if (stack.length === 0) return next()
 
   const { params: prevParams, path: prevPath } = req
+  const routePath: string = req[kRoutePath] || req.originalPath
 
   for (const layer of stack) {
     if (layer.method && layer.method !== req.method.toLowerCase()) continue
-    const match = layer.pathRegex.exec(prevPath)
+    const match = layer.pathRegex.exec(routePath)
     if (!match) continue
 
-    let path = prevPath.slice(match[0].length)
-    if (!path.startsWith('/')) path = '/' + path
+    let nextRoutePath = routePath.slice(match[0].length)
+    if (!nextRoutePath.startsWith('/')) nextRoutePath = '/' + nextRoutePath
     Object.assign(req, {
-      path,
+      path: routePath,
+      [kRoutePath]: nextRoutePath,
       params: {
         ...prevParams,
         ...Object.fromEntries(layer.paramNames.map((name, i) => [name, match[i + 1]])),
@@ -205,6 +233,7 @@ async function handleRequest(router: Router, req: Request, res: Response, next: 
 
     Object.assign(req, {
       path: prevPath,
+      [kRoutePath]: routePath,
       params: prevParams,
     })
 
