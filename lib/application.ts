@@ -34,10 +34,10 @@ const websocketUpgradeRequestHandler: RequestHandler = async function (req, res,
   req.app.server.upgrade(req, upgradeOptions)
 }
 
-class Application<WSData = unknown> {
+class Application {
   server: Bun.Server | null = null
   readonly router: Router
-  websocketHandler?: WebSocketHandler<WSData>
+  websocketHandler?: WebSocketHandler
   constructor() {
     this.router = Router()
   }
@@ -50,7 +50,7 @@ class Application<WSData = unknown> {
    * Should call after some middlewares such as session middleware, cors middleware ...
    * then the `req` object passed to `getUpgradeOptions` method will have the data from the middlewares.
    */
-  websocket(handler: WebSocketHandler<WSData>) {
+  websocket<T = unknown>(handler: WebSocketHandler<T>) {
     if (this.websocketHandler !== undefined) throw new Error('WebSocket handler already exists')
     this.websocketHandler = handler
     this.router.get(handler.path || '/ws', websocketUpgradeRequestHandler)

@@ -1,6 +1,6 @@
 import express from '../index'
 
-const app = express<{ userId?: string }>()
+const app = express()
 
 declare global {
   interface Request {

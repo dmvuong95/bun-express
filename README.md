@@ -72,7 +72,7 @@ Server:
 ```typescript
 import express from 'bun-express'
 
-const app = express<{ userId?: string }>()
+const app = express()
 
 declare global {
   interface Request {

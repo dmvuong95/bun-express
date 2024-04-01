@@ -1,7 +1,7 @@
 import Application from './lib/application'
-import { Router, RequestHandler, ErrorRequestHandler } from './lib/router'
+import type { Router, RequestHandler, ErrorRequestHandler } from './lib/router'
 
-declare function express<WSData = unknown>(): Application<WSData>
+declare function express(): Application
 declare namespace express {
   declare function Router(): Router
 }
