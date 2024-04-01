@@ -9,6 +9,10 @@
     "name": "Dang Minh Vuong",
     "email": "dmvuong95@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dmvuong95/bun-express.git"
+  },
   "license": "MIT",
   "scripts": {
     "test": "bun --watch tests/app.ts"
@@ -20,5 +24,10 @@
     "index.js",
     "index.d.ts",
     "lib"
+  ],
+  "keywords": [
+    "bun",
+    "express",
+    "bun-express"
   ]
 }

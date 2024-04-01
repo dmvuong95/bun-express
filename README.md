@@ -26,6 +26,8 @@ app.router.use((req, res, next) => {
 // Define a route handler
 app.router.post('/', async (req, res) => {
   const body = await req.json()
+  // Do something with the body from the request
+  // Send a response
   res.setJsonBody({ message: 'Hello, World!' }).close()
 })
 
